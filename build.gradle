@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jooq:2.7.3'
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.3'
 	implementation 'com.vaadin:vaadin-spring-boot-starter:23.2.0'
+	implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.39.3.0'
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools:2.7.3'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
