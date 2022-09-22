@@ -38,8 +38,6 @@ public class AphroditeGeneralView extends VerticalLayout {
     Dialog newRecord = new Dialog();
     Button saveButton = new Button("Save"/*env.getProperty("saveButton.title")*/);
 
-    HorizontalLayout upperToolBar;
-
     public AphroditeGeneralView() {
         addClassName("general-view");
         configureGUI();
@@ -59,7 +57,7 @@ public class AphroditeGeneralView extends VerticalLayout {
         creationRecordButtonConfigure();
         upperToolBarConfigure();
 
-        add(upperToolBar, gridLayout); // TODO: 22.09.2022 test for separate add
+        add(gridLayout);
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.START);
     }
@@ -113,8 +111,9 @@ public class AphroditeGeneralView extends VerticalLayout {
     }
 
     private void upperToolBarConfigure() {
-        upperToolBar = new HorizontalLayout(creationRecordButton, downloadDataButton);
+        HorizontalLayout upperToolBar = new HorizontalLayout(creationRecordButton, downloadDataButton);
         upperToolBar.addClassName("upper-toolbar");
+        add(upperToolBar);
     }
 
     private void configureListeners() {
