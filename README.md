@@ -31,4 +31,8 @@ Table raws clickable as well and opens modal window with record edit options.
 <br><br>
 ### Solution
 
-In process..
+Created database connection and prepared transactions.
+<br>
+Created simplest view, but it took time.
+<br>
+Next step is making service and DAO
