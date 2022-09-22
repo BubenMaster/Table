@@ -64,7 +64,7 @@ public class TableDSLContext {
     public DataSource dataSource(){
         HikariConfig config = new HikariConfig();
         config.setDriverClassName(env.getProperty("spring.datasource.driver-class-name"));
-        config.setJdbcUrl("jdbc:sqlite:database\\table.db");
+        config.setJdbcUrl("jdbc:sqlite:database\\table.db"); // TODO: 22.09.2022 Implement reading from properties
         HikariDataSource dSource = new HikariDataSource(config);
         return dSource;
     }
