@@ -4,10 +4,10 @@
 package com.cwt.task.table.jooq.entity;
 
 
+import com.cwt.task.table.jooq.entity.tables.SqliteSequence;
 import org.jooq.Catalog;
 import org.jooq.Table;
 import com.cwt.task.table.jooq.entity.tables.Regulardata;
-import com.cwt.task.table.jooq.entity.tables.SqliteSequence;
 import org.jooq.impl.SchemaImpl;
 
 import java.util.Arrays;

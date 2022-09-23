@@ -1,29 +1,38 @@
 package com.cwt.task.table.dsl_context;
 
+import com.cwt.task.table.dsl_context.properties.ApplicationProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.SQLDialect;
 import org.jooq.impl.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 
 @Configuration
 @ComponentScan({"com.cwt.task.table"})
 @EnableTransactionManagement
 @PropertySource(value = "classpath:application.properties")
+
 public class TableDSLContext {
 
-    @Autowired
-    private Environment env;
+//    @Autowired
+    private final ApplicationProperties env;
+
+    {
+        try {
+            env = new ApplicationProperties("application.properties");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public TableDSLContext() {
+    }
 
 
     @Bean

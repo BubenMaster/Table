@@ -4,11 +4,11 @@
 package com.cwt.task.table.jooq.entity.tables;
 
 
+import com.cwt.task.table.jooq.entity.DefaultSchema;
+import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import org.jooq.Record;
 import org.jooq.*;
-import com.cwt.task.table.jooq.entity.DefaultSchema;
 import com.cwt.task.table.jooq.entity.Keys;
-import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;

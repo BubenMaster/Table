@@ -5,10 +5,10 @@ package com.cwt.task.table.jooq.entity;
 
 
 import com.cwt.task.table.jooq.entity.tables.Regulardata;
+import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 
-import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 

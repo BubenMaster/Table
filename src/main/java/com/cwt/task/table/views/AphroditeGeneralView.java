@@ -1,8 +1,10 @@
 package com.cwt.task.table.views;
 
 
-import com.cwt.task.table.jooq.entity.adapter.RegulardataRecordAdapter;
+import com.cwt.task.table.controller.TableController;
+import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
 
+import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import com.cwt.task.table.views.order.ColumnOrder;
 import com.cwt.task.table.views.properties.ViewProperties;
 import com.vaadin.flow.component.button.Button;
@@ -17,17 +19,27 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.RouteScope;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
 
 import java.io.IOException;
+import java.util.List;
 
 
 import static com.cwt.task.table.views.order.ColumnKeys.*;
 
-@Route(value = "/table-aphrodite/")
+@Route(value = "/table-aphrodite")
 @RouteScope
 @PageTitle("Aphrodite View")
-public class AphroditeGeneralView extends VerticalLayout {
+@Component
+@ComponentScan({"com.cwt.task.table"})
+public class AphroditeGeneralView extends VerticalLayout{
+
+
+    TableController tableController = new TableController();
+
 
     ViewProperties viewProperties = new ViewProperties("view.properties");
 
@@ -44,6 +56,7 @@ public class AphroditeGeneralView extends VerticalLayout {
         addClassName("general-view");
         configureGUI();
         configureListeners();
+
     }
 
 
@@ -66,13 +79,16 @@ public class AphroditeGeneralView extends VerticalLayout {
 
 
     private void gridConfigure() {
+        List<RegulardataRecordAdapter> records = tableController.showAllRegularDataRecords();
+        grid.setItems(records);
+
         grid.addClassNames("table-grid");
         grid.setWidth("40em");
         grid.addContextMenu();
         ColumnOrder<RegulardataRecordAdapter> columnOrder = new ColumnOrder<>();
         grid.setColumnOrder(
                 columnOrder.of(grid).byNames
-                (name(),comment(),amount(),created(),updated())
+                        (id(),name(),comment(),amount(),created(),updated())
         );
     }
 
@@ -133,4 +149,5 @@ public class AphroditeGeneralView extends VerticalLayout {
     private void creationRecordButtonListener() {
         creationRecordButton.addClickListener(e-> newRecord.open());
     }
+
 }
