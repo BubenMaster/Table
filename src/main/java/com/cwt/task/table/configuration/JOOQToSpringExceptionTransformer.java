@@ -1,4 +1,4 @@
-package com.cwt.task.table.dsl_context;
+package com.cwt.task.table.configuration;
 
 import org.jooq.ExecuteContext;
 import org.jooq.SQLDialect;

@@ -1,6 +1,7 @@
-package com.cwt.task.table.dsl_context;
+package com.cwt.task.table.configuration;
 
-import com.cwt.task.table.dsl_context.properties.ApplicationProperties;
+import com.cwt.task.table.configuration.properties.ApplicationProperties;
+import com.cwt.task.table.views.properties.ViewProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.SQLDialect;
@@ -9,16 +10,17 @@ import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 
 @Configuration
-@ComponentScan({"com.cwt.task.table"})
+@ComponentScan(basePackages = "com.cwt.task.table")
+@EnableWebMvc
 @EnableTransactionManagement
 @PropertySource(value = "classpath:application.properties")
-
-public class TableDSLContext {
+public class TableConfiguration {
 
 //    @Autowired
     private final ApplicationProperties env;
@@ -31,7 +33,7 @@ public class TableDSLContext {
         }
     }
 
-    public TableDSLContext() {
+    public TableConfiguration() {
     }
 
 
@@ -82,8 +84,5 @@ public class TableDSLContext {
     public JOOQToSpringExceptionTransformer jooqToSpringExceptionTransformer() {
         return new JOOQToSpringExceptionTransformer();
     }
-
-
-
 
 }
