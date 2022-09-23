@@ -24,6 +24,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 
@@ -38,12 +39,8 @@ import static com.cwt.task.table.views.order.ColumnKeys.*;
 public class AphroditeGeneralView extends VerticalLayout{
 
 
-    TableController tableController = new TableController();
-
-
     ViewProperties viewProperties = new ViewProperties("view.properties");
-
-
+    TableController tableController = new TableController();
     Grid<RegulardataRecordAdapter> grid = new Grid<>(RegulardataRecordAdapter.class);
     Button downloadDataButton = new Button(viewProperties.getProperty("downloadButton.title"));
     Button creationRecordButton = new Button(viewProperties.getProperty("creationRecordButton.title"));
@@ -52,7 +49,8 @@ public class AphroditeGeneralView extends VerticalLayout{
 
 
 
-    public AphroditeGeneralView() throws IOException {
+    public AphroditeGeneralView() {
+
         addClassName("general-view");
         configureGUI();
         configureListeners();
@@ -93,6 +91,7 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
 
+
     private void newRecordConfigure(){
         newRecord.setHeaderTitle(viewProperties.getProperty("newRecord.headerTitle"));
         VerticalLayout newRecordLayout = newRecordLayoutCreate();
@@ -103,6 +102,8 @@ public class AphroditeGeneralView extends VerticalLayout{
         newRecord.getFooter().add(cancelButton);
         newRecord.getFooter().add(saveButton);
     }
+
+
     private VerticalLayout newRecordLayoutCreate() {
 
         TextField nameField = new TextField(viewProperties.getProperty("nameField.title"));

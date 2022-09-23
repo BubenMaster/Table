@@ -2,6 +2,7 @@ package com.cwt.task.table.views.properties;
 
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
@@ -20,15 +21,4 @@ public class ViewProperties extends Properties {
             throw new RuntimeException(e);
         }
     }
-
-//    public ViewProperties() {
-//        String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("view.properties")).getPath();
-//        try {
-//            this.load(new FileReader((rootPath)));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-
 }
