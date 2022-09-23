@@ -4,6 +4,7 @@ package com.cwt.task.table.views;
 import com.cwt.task.table.jooq.entity.adapter.RegulardataRecordAdapter;
 
 import com.cwt.task.table.views.order.ColumnOrder;
+import com.cwt.task.table.views.properties.ViewProperties;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -15,30 +16,31 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.StandardEnvironment;
+import com.vaadin.flow.spring.annotation.RouteScope;
+
+
+import java.io.IOException;
+
 
 import static com.cwt.task.table.views.order.ColumnKeys.*;
 
-@Configuration
-@Route(value = "/table-aphrodite")
+@Route(value = "/table-aphrodite/")
+@RouteScope
 @PageTitle("Aphrodite View")
-@PropertySource(value = "classpath:view.properties")
 public class AphroditeGeneralView extends VerticalLayout {
 
-    @Autowired
-    private Environment env = new StandardEnvironment();
+    ViewProperties viewProperties = new ViewProperties("view.properties");
+
 
     Grid<RegulardataRecordAdapter> grid = new Grid<>(RegulardataRecordAdapter.class);
-    Button downloadDataButton = new Button("Download data"/*env.getProperty("downloadButton.title")*/);
-    Button creationRecordButton = new Button("Create record"/*env.getProperty("creationRecordButton.title")*/);
+    Button downloadDataButton = new Button(viewProperties.getProperty("downloadButton.title"));
+    Button creationRecordButton = new Button(viewProperties.getProperty("creationRecordButton.title"));
     Dialog newRecord = new Dialog();
-    Button saveButton = new Button("Save"/*env.getProperty("saveButton.title")*/);
+    Button saveButton = new Button(viewProperties.getProperty("saveButton.title"));
 
-    public AphroditeGeneralView() {
+
+
+    public AphroditeGeneralView() throws IOException {
         addClassName("general-view");
         configureGUI();
         configureListeners();
@@ -64,29 +66,32 @@ public class AphroditeGeneralView extends VerticalLayout {
 
 
     private void gridConfigure() {
-        grid.addClassNames("table-grid"); //
-        grid.setWidth("40em");//
+        grid.addClassNames("table-grid");
+        grid.setWidth("40em");
         grid.addContextMenu();
         ColumnOrder<RegulardataRecordAdapter> columnOrder = new ColumnOrder<>();
-        grid.setColumnOrder(columnOrder.of(grid).byNames(name(),comment(),amount(),created(),updated()));
+        grid.setColumnOrder(
+                columnOrder.of(grid).byNames
+                (name(),comment(),amount(),created(),updated())
+        );
     }
 
 
     private void newRecordConfigure(){
-        newRecord.setHeaderTitle("New Record"/*env.getProperty("newRecord.headerTitle")*/);
+        newRecord.setHeaderTitle(viewProperties.getProperty("newRecord.headerTitle"));
         VerticalLayout newRecordLayout = newRecordLayoutCreate();
         newRecord.add(newRecordLayout);
 
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        Button cancelButton = new Button("Cancel"/*env.getProperty("cancelButton.title")*/, e -> newRecord.close());
+        Button cancelButton = new Button(viewProperties.getProperty("cancelButton.title"), e -> newRecord.close());
         newRecord.getFooter().add(cancelButton);
         newRecord.getFooter().add(saveButton);
     }
     private VerticalLayout newRecordLayoutCreate() {
 
-        TextField nameField = new TextField("Name"/*env.getProperty("nameField.title")*/);
-        TextField commentField = new TextField("Comment"/*env.getProperty("commentField.title")*/);
-        NumberField amountField = new NumberField("Amount"/*env.getProperty("amountField.title")*/);
+        TextField nameField = new TextField(viewProperties.getProperty("nameField.title"));
+        TextField commentField = new TextField(viewProperties.getProperty("commentField.title"));
+        NumberField amountField = new NumberField(viewProperties.getProperty("amountField.title"));
 
         VerticalLayout dialogLayout = new VerticalLayout(
                 nameField,
