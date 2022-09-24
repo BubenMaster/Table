@@ -1,13 +1,13 @@
-package com.cwt.task.table.configuration.properties;
+package com.cwt.task.table.properties;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;
 
-public class ApplicationProperties {
+public class PropertiesFromFile {
     Properties properties;
-    public ApplicationProperties(String fileName) throws IOException {
+    public PropertiesFromFile(String fileName) throws IOException {
         properties = new Properties();
         String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource(fileName)).getPath();
         properties.load(new FileReader((rootPath)));

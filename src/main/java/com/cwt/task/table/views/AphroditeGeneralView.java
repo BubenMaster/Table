@@ -5,13 +5,12 @@ import com.cwt.task.table.controller.TableController;
 import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
 
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
+import com.cwt.task.table.properties.PropertiesFromFile;
 import com.cwt.task.table.views.order.ColumnOrder;
-import com.cwt.task.table.views.properties.ViewProperties;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -24,11 +23,10 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.RouteScope;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.theme.Theme;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Component;
 
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -42,7 +40,16 @@ import static com.cwt.task.table.views.order.ColumnKeys.*;
 public class AphroditeGeneralView extends VerticalLayout{
 
 
-    ViewProperties viewProperties = new ViewProperties("view.properties");
+    PropertiesFromFile viewProperties;
+
+    {
+        try {
+            viewProperties = new PropertiesFromFile("view.properties");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     TableController tableController = new TableController();
 
     Binder<RegulardataRecordAdapter> binder;
@@ -96,8 +103,8 @@ public class AphroditeGeneralView extends VerticalLayout{
         grid.getColumnByKey(id()).setWidth("5em");
 //        grid.getColumnByKey(name()).setWidth("10em");
         grid.getColumnByKey(amount()).setWidth("5em");
-        grid.getColumnByKey(updated()).setWidth("15em");
-        grid.getColumnByKey(created()).setWidth("15em");
+        grid.getColumnByKey(updated()).setWidth("11em");
+        grid.getColumnByKey(created()).setWidth("11em");
     }
 
     private void refreshGridRecords(){
