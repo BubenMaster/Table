@@ -2,22 +2,27 @@ package com.cwt.task.table.configuration;
 
 import com.cwt.task.table.configuration.properties.ApplicationProperties;
 import com.cwt.task.table.views.properties.ViewProperties;
+import com.vaadin.flow.spring.annotation.EnableVaadin;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.SQLDialect;
 import org.jooq.impl.*;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@Configuration
+
+@SpringBootConfiguration
 @ComponentScan(basePackages = "com.cwt.task.table")
-@EnableWebMvc
+@EnableVaadin
 @EnableTransactionManagement
 @PropertySource(value = "classpath:application.properties")
 public class TableConfiguration {
@@ -28,6 +33,7 @@ public class TableConfiguration {
     {
         try {
             env = new ApplicationProperties("application.properties");
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -46,8 +52,6 @@ public class TableConfiguration {
     @Bean
     public DefaultConfiguration jooqConfiguration() {
         DefaultConfiguration jooqConfig = new DefaultConfiguration();
-        jooqConfig.setConnectionProvider(connectionProvider());
-
         jooqConfig.set(connectionProvider());
         jooqConfig.set(new DefaultExecuteListenerProvider(
                 jooqToSpringExceptionTransformer()));
@@ -71,12 +75,13 @@ public class TableConfiguration {
     private LazyConnectionDataSourceProxy lazyConnectionDataSource() {
         return new LazyConnectionDataSourceProxy(dataSource());
     }
-    @Bean()
+    @Bean
     public DataSource dataSource(){
         HikariConfig config = new HikariConfig();
         config.setDriverClassName(env.getProperty("spring.datasource.driver-class-name"));
         config.setJdbcUrl("jdbc:sqlite:database\\table.db"); // TODO: 22.09.2022 Implement reading from properties
         HikariDataSource dSource = new HikariDataSource(config);
+
         return dSource;
     }
 

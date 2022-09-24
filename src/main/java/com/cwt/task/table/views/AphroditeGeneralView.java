@@ -23,6 +23,8 @@ import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.RouteScope;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.theme.Theme;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +37,7 @@ import static com.cwt.task.table.views.order.ColumnKeys.*;
 @Route(value = "/table-aphrodite")
 @RouteScope
 @PageTitle("Aphrodite View")
-@Component
+@SpringComponent
 @ComponentScan({"com.cwt.task.table"})
 public class AphroditeGeneralView extends VerticalLayout{
 
