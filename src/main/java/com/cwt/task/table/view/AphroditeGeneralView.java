@@ -5,7 +5,7 @@ import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
 
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import com.cwt.task.table.service.TableService;
-import com.cwt.task.table.view.order.ColumnOrder;
+import com.cwt.task.table.view.grid.GridLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -31,9 +31,6 @@ import org.springframework.context.annotation.PropertySource;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-
-import static com.cwt.task.table.view.order.ColumnKeys.*;
-
 @Route(value = "/table-aphrodite")
 @RouteScope
 @PageTitle("Aphrodite View")
@@ -45,7 +42,6 @@ public class AphroditeGeneralView extends VerticalLayout{
     private final TableService service;
 
     Binder<RegulardataRecordAdapter> binder;
-    Grid<RegulardataRecordAdapter> grid = new Grid<>(RegulardataRecordAdapter.class);
 
     @Value("${downloadButton.title}")
     Button downloadDataButton;
@@ -53,13 +49,20 @@ public class AphroditeGeneralView extends VerticalLayout{
     @Value("${creationRecordButton.title}")
     Button creationRecordButton;
 
+    List<RegulardataRecordAdapter> records;
+    @Autowired
+    GridLayout gridLayout;
+    @Autowired
+    Grid<RegulardataRecordAdapter> gridOnView;
+
+
     Dialog newRecord = new Dialog();
 
 
     @Value("${saveButton.title}")
     Button saveButton;
 
-    List<RegulardataRecordAdapter> records;
+
 
 
 
@@ -74,16 +77,17 @@ public class AphroditeGeneralView extends VerticalLayout{
     {
         addClassName("general-view");
         configureGUI();
+        defaultActions();
         configureListeners();
+    }
+
+    private void defaultActions() {
+        refreshGridRecords();
     }
 
 
     void configureGUI(){
         setSizeFull();
-
-        gridConfigure();
-        HorizontalLayout gridLayout = new HorizontalLayout(grid);
-        gridLayout.setAlignItems(Alignment.CENTER);
 
 
         newRecordConfigure();
@@ -97,26 +101,11 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
 
-    private void gridConfigure() {
-        refreshGridRecords();
-
-        grid.addClassNames("table-grid");
-        grid.setWidth("60em");
-        grid.addContextMenu();
-        ColumnOrder<RegulardataRecordAdapter> columnOrder = new ColumnOrder<>();
-        grid.setColumnOrder(
-                columnOrder.of(grid).byNames
-                        (id(),name(),comment(),amount(),created(),updated())
-        );
-        grid.getColumnByKey(id()).setWidth("5em");
-        grid.getColumnByKey(amount()).setWidth("5em");
-        grid.getColumnByKey(updated()).setWidth("11em");
-        grid.getColumnByKey(created()).setWidth("11em");
-    }
+    private void gridConfigure() {}
 
     private void refreshGridRecords(){
         records = service.getAllRegularDataRecords();
-        grid.setItems(records);
+        gridOnView.setItems(records);
     }
 
 

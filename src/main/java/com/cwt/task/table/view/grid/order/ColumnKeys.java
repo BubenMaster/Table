@@ -1,4 +1,4 @@
-package com.cwt.task.table.view.order;
+package com.cwt.task.table.view.grid.order;
 
 import com.cwt.task.table.jooq.entity.Tables;
 
