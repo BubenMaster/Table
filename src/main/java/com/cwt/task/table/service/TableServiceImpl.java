@@ -15,7 +15,7 @@ import java.util.List;
 public class TableServiceImpl implements TableService {
 
     @Autowired
-    TableDAO tableDAO = new TableDAOImpl();
+    TableDAO tableDAO;
 
     public TableServiceImpl() {
     }

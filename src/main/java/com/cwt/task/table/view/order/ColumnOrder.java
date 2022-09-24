@@ -1,4 +1,4 @@
-package com.cwt.task.table.views.order;
+package com.cwt.task.table.view.order;
 
 
 import com.vaadin.flow.component.grid.Grid;

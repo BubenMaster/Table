@@ -1,12 +1,11 @@
-package com.cwt.task.table.views;
+package com.cwt.task.table.view;
 
 
-import com.cwt.task.table.controller.TableController;
 import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
 
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
-import com.cwt.task.table.properties.PropertiesFromFile;
-import com.cwt.task.table.views.order.ColumnOrder;
+import com.cwt.task.table.service.TableService;
+import com.cwt.task.table.view.order.ColumnOrder;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -23,51 +22,59 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.RouteScope;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 
 
-import java.io.IOException;
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 
-import static com.cwt.task.table.views.order.ColumnKeys.*;
+import static com.cwt.task.table.view.order.ColumnKeys.*;
 
 @Route(value = "/table-aphrodite")
 @RouteScope
 @PageTitle("Aphrodite View")
 @SpringComponent
 @ComponentScan({"com.cwt.task.table"})
+@PropertySource("classpath:view.properties")
 public class AphroditeGeneralView extends VerticalLayout{
 
-
-    PropertiesFromFile viewProperties;
-
-    {
-        try {
-            viewProperties = new PropertiesFromFile("view.properties");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    TableController tableController = new TableController();
+    private final TableService service;
 
     Binder<RegulardataRecordAdapter> binder;
     Grid<RegulardataRecordAdapter> grid = new Grid<>(RegulardataRecordAdapter.class);
 
-    Button downloadDataButton = new Button(viewProperties.getProperty("downloadButton.title"));
-    Button creationRecordButton = new Button(viewProperties.getProperty("creationRecordButton.title"));
+    @Value("${downloadButton.title}")
+    Button downloadDataButton;
+
+    @Value("${creationRecordButton.title}")
+    Button creationRecordButton;
+
     Dialog newRecord = new Dialog();
-    Button saveButton = new Button(viewProperties.getProperty("saveButton.title"));
+
+
+    @Value("${saveButton.title}")
+    Button saveButton;
+
+    List<RegulardataRecordAdapter> records;
 
 
 
-    public AphroditeGeneralView() {
+    @Autowired
+    public AphroditeGeneralView(TableService tableServiceImpl) {
+        this.service = tableServiceImpl;
+    }
 
+
+    @PostConstruct
+    public void init()
+    {
         addClassName("general-view");
         configureGUI();
         configureListeners();
-
     }
 
 
@@ -77,6 +84,7 @@ public class AphroditeGeneralView extends VerticalLayout{
         gridConfigure();
         HorizontalLayout gridLayout = new HorizontalLayout(grid);
         gridLayout.setAlignItems(Alignment.CENTER);
+
 
         newRecordConfigure();
         downloadDataButtonConfigure();
@@ -101,25 +109,25 @@ public class AphroditeGeneralView extends VerticalLayout{
                         (id(),name(),comment(),amount(),created(),updated())
         );
         grid.getColumnByKey(id()).setWidth("5em");
-//        grid.getColumnByKey(name()).setWidth("10em");
         grid.getColumnByKey(amount()).setWidth("5em");
         grid.getColumnByKey(updated()).setWidth("11em");
         grid.getColumnByKey(created()).setWidth("11em");
     }
 
     private void refreshGridRecords(){
-        List<RegulardataRecordAdapter> records = tableController.showAllRegularDataRecords();
+        records = service.getAllRegularDataRecords();
         grid.setItems(records);
     }
 
 
+
     private void newRecordConfigure(){
-        newRecord.setHeaderTitle(viewProperties.getProperty("newRecord.headerTitle"));
+        newRecord.setHeaderTitle("newRecord.headerTitle");
         VerticalLayout newRecordLayout = newRecordLayoutCreate();
         newRecord.add(newRecordLayout);
 
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        Button cancelButton = new Button(viewProperties.getProperty("cancelButton.title"), e -> newRecord.close());
+        Button cancelButton = new Button("cancelButton.title", event -> newRecord.close());
         newRecord.getFooter().add(cancelButton);
         newRecord.getFooter().add(saveButton);
     }
@@ -127,9 +135,9 @@ public class AphroditeGeneralView extends VerticalLayout{
 
     private VerticalLayout newRecordLayoutCreate() {
 
-        TextField nameField = new TextField(viewProperties.getProperty("nameField.title"));
-        TextField commentField = new TextField(viewProperties.getProperty("commentField.title"));
-        TextField amountField = new TextField(viewProperties.getProperty("amountField.title"));
+        TextField nameField = new TextField("nameField.title");
+        TextField commentField = new TextField("commentField.title");
+        TextField amountField = new TextField("amountField.title");
 
         VerticalLayout dialogLayout = new VerticalLayout(
                 nameField,
@@ -192,7 +200,7 @@ public class AphroditeGeneralView extends VerticalLayout{
             } catch (ValidationException ex) {
                 throw new RuntimeException(ex);
             }
-            tableController.saveRegularDataRecord(record.actualRegularDataRecord());
+            service.saveRegularDataRecord(record.actualRegularDataRecord());
             refreshGridRecords();
             newRecord.close();});
     }

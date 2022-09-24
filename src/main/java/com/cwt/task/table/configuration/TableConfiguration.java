@@ -1,6 +1,6 @@
 package com.cwt.task.table.configuration;
 
-import com.cwt.task.table.properties.PropertiesFromFile;
+
 import com.vaadin.flow.spring.annotation.EnableVaadin;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -11,10 +11,9 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.io.IOException;
+
 
 
 @SpringBootConfiguration
