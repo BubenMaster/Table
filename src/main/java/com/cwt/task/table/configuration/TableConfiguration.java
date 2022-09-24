@@ -1,21 +1,17 @@
 package com.cwt.task.table.configuration;
 
-import com.cwt.task.table.configuration.properties.ApplicationProperties;
-import com.cwt.task.table.views.properties.ViewProperties;
+import com.cwt.task.table.properties.PropertiesFromFile;
 import com.vaadin.flow.spring.annotation.EnableVaadin;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.SQLDialect;
 import org.jooq.impl.*;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import java.io.IOException;
 
@@ -28,11 +24,11 @@ import java.io.IOException;
 public class TableConfiguration {
 
 //    @Autowired
-    private final ApplicationProperties env;
+    private final PropertiesFromFile env;
 
     {
         try {
-            env = new ApplicationProperties("application.properties");
+            env = new PropertiesFromFile("application.properties");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
