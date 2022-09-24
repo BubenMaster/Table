@@ -11,7 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import static com.cwt.task.table.jooq.entity.Tables.*;
+import static org.jooq.impl.DSL.currentTimestamp;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,5 +42,15 @@ public class TableDAOImpl implements TableDAO {
             records.add(recordAdapter);
         }
         return records;
+    }
+
+    @Override
+    public void saveRegularDataRecord(RegulardataRecord record) {
+        ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(Instant.now());
+        LocalDateTime localTime =((Timestamp) query.select(currentTimestamp()).fetch().getValue(0,0))
+        .toLocalDateTime().plusSeconds(offset.getTotalSeconds());
+        record.setCreated(localTime);
+        record.setUpdated(localTime);
+        query.insertInto(REGULARDATA).set(record).execute();
     }
 }

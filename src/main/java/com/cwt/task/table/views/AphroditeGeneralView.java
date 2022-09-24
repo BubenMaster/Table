@@ -11,21 +11,22 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.RouteScope;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -41,7 +42,10 @@ public class AphroditeGeneralView extends VerticalLayout{
 
     ViewProperties viewProperties = new ViewProperties("view.properties");
     TableController tableController = new TableController();
+
+    Binder<RegulardataRecordAdapter> binder;
     Grid<RegulardataRecordAdapter> grid = new Grid<>(RegulardataRecordAdapter.class);
+
     Button downloadDataButton = new Button(viewProperties.getProperty("downloadButton.title"));
     Button creationRecordButton = new Button(viewProperties.getProperty("creationRecordButton.title"));
     Dialog newRecord = new Dialog();
@@ -77,19 +81,27 @@ public class AphroditeGeneralView extends VerticalLayout{
 
 
     private void gridConfigure() {
-        List<RegulardataRecordAdapter> records = tableController.showAllRegularDataRecords();
-        grid.setItems(records);
+        refreshGridRecords();
 
         grid.addClassNames("table-grid");
-        grid.setWidth("40em");
+        grid.setWidth("60em");
         grid.addContextMenu();
         ColumnOrder<RegulardataRecordAdapter> columnOrder = new ColumnOrder<>();
         grid.setColumnOrder(
                 columnOrder.of(grid).byNames
                         (id(),name(),comment(),amount(),created(),updated())
         );
+        grid.getColumnByKey(id()).setWidth("5em");
+//        grid.getColumnByKey(name()).setWidth("10em");
+        grid.getColumnByKey(amount()).setWidth("5em");
+        grid.getColumnByKey(updated()).setWidth("15em");
+        grid.getColumnByKey(created()).setWidth("15em");
     }
 
+    private void refreshGridRecords(){
+        List<RegulardataRecordAdapter> records = tableController.showAllRegularDataRecords();
+        grid.setItems(records);
+    }
 
 
     private void newRecordConfigure(){
@@ -108,7 +120,7 @@ public class AphroditeGeneralView extends VerticalLayout{
 
         TextField nameField = new TextField(viewProperties.getProperty("nameField.title"));
         TextField commentField = new TextField(viewProperties.getProperty("commentField.title"));
-        NumberField amountField = new NumberField(viewProperties.getProperty("amountField.title"));
+        TextField amountField = new TextField(viewProperties.getProperty("amountField.title"));
 
         VerticalLayout dialogLayout = new VerticalLayout(
                 nameField,
@@ -119,6 +131,15 @@ public class AphroditeGeneralView extends VerticalLayout{
         dialogLayout.setSpacing(false);
         dialogLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
         dialogLayout.getStyle().set("width", "18rem").set("max-width", "100%");
+
+        binder = new Binder<>(RegulardataRecordAdapter.class);
+        binder.forField(nameField)
+                .bind(RegulardataRecordAdapter::getName,RegulardataRecordAdapter::setName);
+        binder.forField(commentField)
+                .bind(RegulardataRecordAdapter::getComment,RegulardataRecordAdapter::setComment);
+        binder.forField(amountField)
+                .withConverter(new StringToIntegerConverter("Must be a number"))
+                .bind(RegulardataRecordAdapter::getAmount,RegulardataRecordAdapter::setAmount);
 
         return dialogLayout;
     }
@@ -133,9 +154,20 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
     private void upperToolBarConfigure() {
-        HorizontalLayout upperToolBar = new HorizontalLayout(creationRecordButton, downloadDataButton);
-        upperToolBar.addClassName("upper-toolbar");
-        add(upperToolBar);
+        H3 regularRecords = new H3("Regular records");
+        regularRecords.setWidth("15em");
+        VerticalLayout upperLeftLayout = new VerticalLayout(regularRecords);
+        upperLeftLayout.setAlignItems(Alignment.START);
+        upperLeftLayout.setJustifyContentMode(JustifyContentMode.END);
+
+        VerticalLayout upperRightLayout = new VerticalLayout(downloadDataButton,creationRecordButton);
+        upperRightLayout.setAlignItems(Alignment.END);
+        upperRightLayout.setJustifyContentMode(JustifyContentMode.END);
+
+        HorizontalLayout upperLayout = new HorizontalLayout(upperLeftLayout, upperRightLayout);
+        upperLayout.setWidth("60em");
+
+        add(upperLayout);
     }
 
     private void configureListeners() {
@@ -144,7 +176,16 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
     private void saveButtonListener() {
-        saveButton.addClickListener(e-> newRecord.close());
+        saveButton.addClickListener(e-> {
+            RegulardataRecordAdapter record = new RegulardataRecordAdapter(new RegulardataRecord());
+            try {
+                binder.writeBean(record);
+            } catch (ValidationException ex) {
+                throw new RuntimeException(ex);
+            }
+            tableController.saveRegularDataRecord(record.actualRegularDataRecord());
+            refreshGridRecords();
+            newRecord.close();});
     }
 
     private void creationRecordButtonListener() {

@@ -24,4 +24,7 @@ public class TableController {
         return allRegulardataRecords;
     }
 
+    public void saveRegularDataRecord(RegulardataRecord record) {
+        tableService.saveRegularDataRecord(record);
+    }
 }

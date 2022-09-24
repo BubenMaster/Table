@@ -12,11 +12,11 @@ public class RegulardataRecordAdapter {
         this.record = record;
     }
 
-    public int getId() {
+    public Integer getId() {
         return this.record.getId();
     }
 
-    public void setId(int value){
+    public void setId(Integer value){
         this.record.setId(value);
     }
 
@@ -35,11 +35,11 @@ public class RegulardataRecordAdapter {
         this.record.setComment(value);
     }
 
-    public int getAmount() {
+    public Integer getAmount() {
         return this.record.getAmount();
     }
 
-    public void setAmount(int value) {
+    public void setAmount(Integer value) {
         this.record.setAmount(value);
     }
 
@@ -52,7 +52,7 @@ public class RegulardataRecordAdapter {
         return this.record.getCreated();
     }
 
-    public RegulardataRecord record() {
+    public RegulardataRecord actualRegularDataRecord() {
         return record;
     }
 }

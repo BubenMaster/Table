@@ -3,6 +3,7 @@ package com.cwt.task.table.service;
 import com.cwt.task.table.dao.TableDAO;
 import com.cwt.task.table.dao.TableDAOImpl;
 import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
+import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,5 +24,11 @@ public class TableServiceImpl implements TableService {
     @Transactional
     public List<RegulardataRecordAdapter> getAllRegularDataRecords() {
         return tableDAO.getAllRegularDataRecords();
+    }
+
+    @Override
+    @Transactional
+    public void saveRegularDataRecord(RegulardataRecord record) {
+        tableDAO.saveRegularDataRecord(record);
     }
 }
