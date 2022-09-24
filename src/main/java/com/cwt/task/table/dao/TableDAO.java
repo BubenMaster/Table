@@ -11,4 +11,6 @@ public interface TableDAO {
     List<RegulardataRecordAdapter> getAllRegularDataRecords();
 
     void saveRegularDataRecord(RegulardataRecord record);
+
+    void deleteByIdRegulardataRecord(RegulardataRecord actualRegularDataRecord);
 }

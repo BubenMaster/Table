@@ -10,6 +10,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -30,6 +31,7 @@ import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 
 @Route(value = "/table-aphrodite")
 @RouteScope
@@ -43,11 +45,18 @@ public class AphroditeGeneralView extends VerticalLayout{
 
     Binder<RegulardataRecordAdapter> binder;
 
-    @Value("${downloadButton.title}")
-    Button downloadDataButton;
+    @Value("${downloadButton.title}") Button downloadDataButton;
+    @Value("${creationRecordButton.title}") Button creationRecordButton;
 
-    @Value("${creationRecordButton.title}")
-    Button creationRecordButton;
+    @Value("${nameField.title}") TextField nameField;
+    @Value("${commentField.title}") TextField commentField;
+    @Value("${amountField.title}") TextField amountField;
+    @Value("${newRecord.header.title}") String newRecordHeaderTitle;
+    @Value("${cancelButton.title}") String newRecordCancelButtonTitle;
+    @Value("${grid.deleteButton.title}") String gridDeleteButtonTitle;
+    @Value("${grid.title}") H3 gridTitle;
+    @Value("${convertToIntegerError.message}") String convertToIntegerErrorMessage;
+
 
     List<RegulardataRecordAdapter> records;
     @Autowired
@@ -101,7 +110,6 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
 
-    private void gridConfigure() {}
 
     private void refreshGridRecords(){
         records = service.getAllRegularDataRecords();
@@ -111,22 +119,19 @@ public class AphroditeGeneralView extends VerticalLayout{
 
 
     private void newRecordConfigure(){
-        newRecord.setHeaderTitle("newRecord.headerTitle");
+        newRecord.setHeaderTitle(newRecordHeaderTitle);
         VerticalLayout newRecordLayout = newRecordLayoutCreate();
         newRecord.add(newRecordLayout);
 
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        Button cancelButton = new Button("cancelButton.title", event -> newRecord.close());
+        Button cancelButton = new Button(newRecordCancelButtonTitle, event -> newRecord.close());
         newRecord.getFooter().add(cancelButton);
         newRecord.getFooter().add(saveButton);
     }
 
 
-    private VerticalLayout newRecordLayoutCreate() {
 
-        TextField nameField = new TextField("nameField.title");
-        TextField commentField = new TextField("commentField.title");
-        TextField amountField = new TextField("amountField.title");
+    private VerticalLayout newRecordLayoutCreate() {
 
         VerticalLayout dialogLayout = new VerticalLayout(
                 nameField,
@@ -144,7 +149,7 @@ public class AphroditeGeneralView extends VerticalLayout{
         binder.forField(commentField)
                 .bind(RegulardataRecordAdapter::getComment,RegulardataRecordAdapter::setComment);
         binder.forField(amountField)
-                .withConverter(new StringToIntegerConverter("Must be a number"))
+                .withConverter(new StringToIntegerConverter(convertToIntegerErrorMessage))
                 .bind(RegulardataRecordAdapter::getAmount,RegulardataRecordAdapter::setAmount);
 
         return dialogLayout;
@@ -160,9 +165,8 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
     private void upperToolBarConfigure() {
-        H3 regularRecords = new H3("Regular records");
-        regularRecords.setWidth("15em");
-        VerticalLayout upperLeftLayout = new VerticalLayout(regularRecords);
+        gridTitle.setWidth("15em");
+        VerticalLayout upperLeftLayout = new VerticalLayout(gridTitle);
         upperLeftLayout.setAlignItems(Alignment.START);
         upperLeftLayout.setJustifyContentMode(JustifyContentMode.END);
 
@@ -177,8 +181,10 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
     private void configureListeners() {
-        saveButtonListener();
         creationRecordButtonListener();
+        saveButtonListener();
+        gridContextMenuListener();
+
     }
 
     private void saveButtonListener() {
@@ -189,13 +195,23 @@ public class AphroditeGeneralView extends VerticalLayout{
             } catch (ValidationException ex) {
                 throw new RuntimeException(ex);
             }
-            service.saveRegularDataRecord(record.actualRegularDataRecord());
+            service.saveRegularDataRecord(record);
             refreshGridRecords();
-            newRecord.close();});
+            newRecord.close();
+        });
     }
 
     private void creationRecordButtonListener() {
         creationRecordButton.addClickListener(e-> newRecord.open());
+    }
+
+    private void gridContextMenuListener(){
+        GridContextMenu<RegulardataRecordAdapter> gridContextMenu = new GridContextMenu<>(gridOnView);
+        gridContextMenu.addItem(gridDeleteButtonTitle, event -> {
+            Optional<RegulardataRecordAdapter> item = event.getItem();
+            service.deleteRegulardataRecord(item.orElseGet(() -> new RegulardataRecordAdapter(new RegulardataRecord())));
+            refreshGridRecords();
+        });
     }
 
 }

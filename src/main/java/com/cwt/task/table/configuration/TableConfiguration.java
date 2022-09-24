@@ -12,8 +12,10 @@ import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
-
+import java.sql.SQLException;
 
 
 @SpringBootConfiguration
@@ -87,6 +89,15 @@ public class TableConfiguration {
     @Bean
     public JOOQToSpringExceptionTransformer jooqToSpringExceptionTransformer() {
         return new JOOQToSpringExceptionTransformer();
+    }
+
+    @PreDestroy
+    public void preDestroy(){
+        try {
+            dataSource().getConnection().close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

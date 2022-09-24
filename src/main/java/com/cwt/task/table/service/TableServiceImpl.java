@@ -28,7 +28,14 @@ public class TableServiceImpl implements TableService {
 
     @Override
     @Transactional
-    public void saveRegularDataRecord(RegulardataRecord record) {
-        tableDAO.saveRegularDataRecord(record);
+    public void saveRegularDataRecord(RegulardataRecordAdapter record) {
+        tableDAO.saveRegularDataRecord(record.actualRegularDataRecord());
+    }
+
+    @Override
+    @Transactional
+    public void deleteRegulardataRecord(RegulardataRecordAdapter record) {
+
+        tableDAO.deleteByIdRegulardataRecord(record.actualRegularDataRecord());
     }
 }

@@ -9,5 +9,7 @@ public interface TableService {
 
    List<RegulardataRecordAdapter> getAllRegularDataRecords();
 
-    void saveRegularDataRecord(RegulardataRecord record);
+    void saveRegularDataRecord(RegulardataRecordAdapter record);
+
+    void deleteRegulardataRecord(RegulardataRecordAdapter regulardataRecordAdapter);
 }

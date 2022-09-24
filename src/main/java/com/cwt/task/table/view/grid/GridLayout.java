@@ -13,6 +13,8 @@ public class GridLayout extends HorizontalLayout {
     @Autowired
     Grid<RegulardataRecordAdapter> gridOnLayout;
 
+    RecordContextMenu recordContextMenu;
+
     public GridLayout() {
         super();
     }

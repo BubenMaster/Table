@@ -58,6 +58,10 @@ public class TableDAOImpl implements TableDAO {
         dslContext.insertInto(REGULARDATA).set(record).execute();
     }
 
+    @Override
+    public void deleteByIdRegulardataRecord(RegulardataRecord record) {
+        dslContext.deleteFrom(REGULARDATA).where(REGULARDATA.ID.equal(record.getId())).execute();
+    }
 
 
 }
