@@ -60,7 +60,8 @@ public class TableDAOImpl implements TableDAO {
         ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(Instant.now());
         LocalDateTime localTime = ((Timestamp) Objects.requireNonNull(
                 query.select(currentTimestamp()).fetch().getValue(0, 0)))
-                .toLocalDateTime();
+                .toLocalDateTime()
+                .plusSeconds(offset.getTotalSeconds());
 
 
         record.setCreated(localTime);
