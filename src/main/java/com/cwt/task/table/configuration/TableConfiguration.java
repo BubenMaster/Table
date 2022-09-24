@@ -6,6 +6,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.SQLDialect;
 import org.jooq.impl.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
@@ -19,30 +20,36 @@ import java.io.IOException;
 @SpringBootConfiguration
 @ComponentScan(basePackages = "com.cwt.task.table")
 @EnableVaadin
-@EnableTransactionManagement
+//@EnableTransactionManagement
 @PropertySource(value = "classpath:application.properties")
 public class TableConfiguration {
 
-//    @Autowired
-    private final PropertiesFromFile env;
+    @Value("${spring.jooq.sql-dialect}")
+    String sqlDialectName;
 
-    {
-        try {
-            env = new PropertiesFromFile("application.properties");
+    @Value("${spring.datasource.driver-class-name}")
+    String driverClassName;
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    @Value("${spring.datasource.url}")
+    String jdbcUrl;
 
-    public TableConfiguration() {
-    }
+////    @Autowired
+//    private final PropertiesFromFile env;
+//
+//    {
+//        try {
+//            env = new PropertiesFromFile("application.properties");
+//
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
+    public TableConfiguration() {}
 
     @Bean
     public DefaultDSLContext dslContext(){
         return new DefaultDSLContext(jooqConfiguration());
-
     }
 
     @Bean
@@ -51,11 +58,8 @@ public class TableConfiguration {
         jooqConfig.set(connectionProvider());
         jooqConfig.set(new DefaultExecuteListenerProvider(
                 jooqToSpringExceptionTransformer()));
-
-        String sqlDialectName = env.getProperty("spring.jooq.sql-dialect");
         SQLDialect dialect = SQLDialect.valueOf(sqlDialectName);
         jooqConfig.set(dialect);
-
         return jooqConfig;
     }
 
@@ -64,21 +68,21 @@ public class TableConfiguration {
         return new DataSourceConnectionProvider(transactionAwareDatasource());
     }
 
-    private TransactionAwareDataSourceProxy transactionAwareDatasource() {
+    @Bean
+    public TransactionAwareDataSourceProxy transactionAwareDatasource() {
         return new TransactionAwareDataSourceProxy(lazyConnectionDataSource());
     }
 
-    private LazyConnectionDataSourceProxy lazyConnectionDataSource() {
+    @Bean
+    public LazyConnectionDataSourceProxy lazyConnectionDataSource() {
         return new LazyConnectionDataSourceProxy(dataSource());
     }
     @Bean
     public DataSource dataSource(){
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName(env.getProperty("spring.datasource.driver-class-name"));
-        config.setJdbcUrl(env.getProperty("spring.datasource.url")); // TODO: 22.09.2022 Implement reading from properties
-        HikariDataSource dSource = new HikariDataSource(config);
-
-        return dSource;
+        config.setDriverClassName(driverClassName);
+        config.setJdbcUrl(jdbcUrl);
+        return new HikariDataSource(config);
     }
 
     @Bean

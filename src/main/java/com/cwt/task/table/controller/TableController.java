@@ -14,17 +14,17 @@ import java.util.List;
 
 @Controller
 public class TableController {
-
-    @Autowired
-    TableService tableService = new TableServiceImpl();
-
-
-    public List<RegulardataRecordAdapter> showAllRegularDataRecords() {
-        List<RegulardataRecordAdapter> allRegulardataRecords = tableService.getAllRegularDataRecords();
-        return allRegulardataRecords;
-    }
-
-    public void saveRegularDataRecord(RegulardataRecord record) {
-        tableService.saveRegularDataRecord(record);
-    }
+//
+//    @Autowired
+//    TableService tableService = new TableServiceImpl();
+//
+//
+//    public List<RegulardataRecordAdapter> showAllRegularDataRecords() {
+//        List<RegulardataRecordAdapter> allRegulardataRecords = tableService.getAllRegularDataRecords();
+//        return allRegulardataRecords;
+//    }
+//
+//    public void saveRegularDataRecord(RegulardataRecord record) {
+//        tableService.saveRegularDataRecord(record);
+//    }
 }
