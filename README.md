@@ -36,3 +36,5 @@ Created database connection and prepared transactions.
 Created simplest view, but it took time.
 <br>
 Next step is making service and DAO
+<br>
+Single page is http://127.0.0.1:8080/table-aphrodite
