@@ -5,11 +5,17 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 public class RegulardataRecordAdapter {
 
     private RegulardataRecord record;
+
+    private String name;
+    private String comment;
+    private Integer amount;
+
 
     public RegulardataRecordAdapter(RegulardataRecord record) {
         this.record = record;
@@ -59,8 +65,30 @@ public class RegulardataRecordAdapter {
         return record;
     }
 
-//    @Bean
-//    public Class regulardataRecordAdapterClass(){
-//        return this.getClass();
-//    }
+    @Override
+    public String toString() {
+        return "Record is: {" +
+                " " + record.getId() +
+                " " + record.getName() +
+                " " + record.getComment() +
+                " " + record.getAmount() +
+                " " + record.getUpdated() +
+                " " + record.getCreated() +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RegulardataRecordAdapter that = (RegulardataRecordAdapter) o;
+        return Objects.equals(getName(), that.getName())
+                && Objects.equals(getComment(), that.getComment())
+                && Objects.equals(getAmount(), that.getAmount());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getComment(), getAmount());
+    }
 }
