@@ -21,7 +21,6 @@ import java.sql.SQLException;
 @SpringBootConfiguration
 @ComponentScan(basePackages = "com.cwt.task.table")
 @EnableVaadin
-//@EnableTransactionManagement
 @PropertySource(value = "classpath:application.properties")
 public class TableConfiguration {
 

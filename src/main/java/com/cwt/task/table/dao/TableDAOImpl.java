@@ -2,6 +2,7 @@ package com.cwt.task.table.dao;
 
 import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.impl.DefaultDSLContext;
