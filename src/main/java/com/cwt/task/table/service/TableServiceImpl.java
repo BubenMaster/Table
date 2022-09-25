@@ -4,6 +4,7 @@ import com.cwt.task.table.dao.TableDAO;
 import com.cwt.task.table.dao.TableDAOImpl;
 import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +36,6 @@ public class TableServiceImpl implements TableService {
     @Override
     @Transactional
     public void deleteRegulardataRecord(RegulardataRecordAdapter record) {
-
         tableDAO.deleteByIdRegulardataRecord(record.actualRegularDataRecord());
     }
 }

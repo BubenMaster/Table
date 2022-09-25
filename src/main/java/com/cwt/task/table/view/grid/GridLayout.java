@@ -1,29 +1,40 @@
 package com.cwt.task.table.view.grid;
 
 import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.context.annotation.Bean;
+
+import javax.annotation.PostConstruct;
 
 @SpringComponent
 public class GridLayout extends HorizontalLayout {
 
-    @Autowired
-    Grid<RegulardataRecordAdapter> gridOnLayout;
+    RecordsGrid recordsGrid = new RecordsGrid(RegulardataRecordAdapter.class);
+    RecordGridContextMenuContainer contextMenu;
 
-    RecordContextMenu recordContextMenu;
 
     public GridLayout() {
         super();
     }
 
-    @Bean
-    public Grid<RegulardataRecordAdapter> gridOnView(){
+    @PostConstruct
+    public void init(){
         setAlignItems(Alignment.CENTER);
-        add(gridOnLayout);
-        return this.gridOnLayout;
+        contextMenu = new RecordGridContextMenuContainer(recordsGrid.addContextMenu());
+        add(recordsGrid, contextMenu.getRecordGridContextMenu());
+
+    }
+
+    @Bean("recordsGridOnView")
+    public RecordsGrid recordsGridOnView(){
+        return recordsGrid;
+    }
+
+    @Bean
+    public RecordGridContextMenuContainer contextMenu(){
+        return contextMenu;
     }
 
 }

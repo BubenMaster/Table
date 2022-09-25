@@ -1,8 +1,11 @@
 package com.cwt.task.table.dao.adapter;
 
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
+
 
 public class RegulardataRecordAdapter {
 
@@ -55,4 +58,9 @@ public class RegulardataRecordAdapter {
     public RegulardataRecord actualRegularDataRecord() {
         return record;
     }
+
+//    @Bean
+//    public Class regulardataRecordAdapterClass(){
+//        return this.getClass();
+//    }
 }
