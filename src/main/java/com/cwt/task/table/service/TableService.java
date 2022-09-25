@@ -12,4 +12,6 @@ public interface TableService {
     void saveRegularDataRecord(RegulardataRecordAdapter record);
 
     void deleteRegulardataRecord(RegulardataRecordAdapter regulardataRecordAdapter);
+
+    void updateRegularDataRecord(RegulardataRecordAdapter record);
 }

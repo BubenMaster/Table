@@ -13,4 +13,6 @@ public interface TableDAO {
     void saveRegularDataRecord(RegulardataRecord record);
 
     void deleteByIdRegulardataRecord(RegulardataRecord actualRegularDataRecord);
+
+    void updateRegularDataRecord(RegulardataRecord record);
 }

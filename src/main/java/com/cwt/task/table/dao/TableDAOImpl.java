@@ -47,21 +47,31 @@ public class TableDAOImpl implements TableDAO {
 
     @Override
     public void saveRegularDataRecord(RegulardataRecord record) {
-        ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(Instant.now());
-        LocalDateTime localTime = ((Timestamp) Objects.requireNonNull(
-                dslContext.select(currentTimestamp()).fetch().getValue(0, 0)))
-                .toLocalDateTime()
-                .plusSeconds(offset.getTotalSeconds());
-
-
-        record.setCreated(localTime);
-        record.setUpdated(localTime);
+        record.setCreated(askLocalDateTimeFromDataBase());
+        record.setUpdated(askLocalDateTimeFromDataBase());
         dslContext.insertInto(REGULARDATA).set(record).execute();
     }
 
     @Override
     public void deleteByIdRegulardataRecord(RegulardataRecord record) {
         dslContext.deleteFrom(REGULARDATA).where(REGULARDATA.ID.equal(record.getId())).execute();
+    }
+
+    @SuppressWarnings("resource")
+    @Override
+    public void updateRegularDataRecord(RegulardataRecord record) {
+        record.setUpdated(askLocalDateTimeFromDataBase());
+        dslContext.update(REGULARDATA).set(record).where(REGULARDATA.ID.equal(record.getId())).execute();
+    }
+
+    private LocalDateTime askLocalDateTimeFromDataBase(){
+        ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(Instant.now());
+        //noinspection UnnecessaryLocalVariable
+        LocalDateTime localTime = ((Timestamp) Objects.requireNonNull(
+                dslContext.select(currentTimestamp()).fetch().getValue(0, 0)))
+                .toLocalDateTime()
+                .plusSeconds(offset.getTotalSeconds());
+        return localTime;
     }
 
 

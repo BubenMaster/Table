@@ -38,4 +38,9 @@ public class TableServiceImpl implements TableService {
     public void deleteRegulardataRecord(RegulardataRecordAdapter record) {
         tableDAO.deleteByIdRegulardataRecord(record.actualRegularDataRecord());
     }
+
+    @Override
+    public void updateRegularDataRecord(RegulardataRecordAdapter record) {
+        tableDAO.updateRegularDataRecord(record.actualRegularDataRecord());
+    }
 }

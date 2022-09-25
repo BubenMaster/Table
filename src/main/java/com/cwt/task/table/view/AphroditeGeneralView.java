@@ -34,7 +34,6 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Route(value = "/table-aphrodite")
-@VaadinSessionScope
 @PageTitle("Aphrodite View")
 @SpringComponent
 @ComponentScan({"com.cwt.task.table"})
@@ -67,18 +66,15 @@ public class AphroditeGeneralView extends VerticalLayout{
     RecordGridContextMenuContainer contextMenu;
 
     Dialog newRecord = new Dialog();
-
-
     @Value("${saveButton.title}")
     Button saveButton;
-
-
 
 
 
     @Autowired
     public AphroditeGeneralView(TableService tableServiceImpl) {
         this.service = tableServiceImpl;
+        onEnabledStateChanged(true);
     }
 
 
@@ -171,7 +167,7 @@ public class AphroditeGeneralView extends VerticalLayout{
         creationRecordButtonListener();
         saveButtonListener();
         gridContextMenuListener();
-
+        recordsGridOnView.configureBinder(service);
     }
 
     private void onInitServiceRequests() {
@@ -179,7 +175,7 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
     private void saveButtonListener() {
-        saveButton.addClickListener(e-> {
+        saveButton.addClickListener(event-> {
             RegulardataRecordAdapter record = new RegulardataRecordAdapter(new RegulardataRecord());
             try {
                 binder.writeBean(record);

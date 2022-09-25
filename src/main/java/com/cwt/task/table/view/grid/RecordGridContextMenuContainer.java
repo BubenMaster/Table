@@ -5,6 +5,7 @@ import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import com.cwt.task.table.service.TableService;
 import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.grid.contextmenu.GridMenuItem;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 
@@ -12,14 +13,11 @@ import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 
-@PropertySource("classpath:view.properties")
 public class RecordGridContextMenuContainer {
 
-    @Value("${grid.contextMenu.deleteButton.title}")
-    String gridDeleteButtonTitle;
     private GridMenuItem<RegulardataRecordAdapter> deleteButton;
 
-    private GridContextMenu<RegulardataRecordAdapter> recordGridContextMenu;
+    private final GridContextMenu<RegulardataRecordAdapter> recordGridContextMenu;
 
     public RecordGridContextMenuContainer(GridContextMenu<RegulardataRecordAdapter> contextMenu) {
         recordGridContextMenu = contextMenu;
@@ -27,7 +25,7 @@ public class RecordGridContextMenuContainer {
 
     @PostConstruct
     public void init(){
-     deleteButton = recordGridContextMenu.addItem(gridDeleteButtonTitle);
+     deleteButton = recordGridContextMenu.addItem("Delete");
     }
 
     public void deleteButtonClickListener(TableService service, RecordsGrid recordsGrid){
@@ -37,6 +35,7 @@ public class RecordGridContextMenuContainer {
                 });
     }
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private void prepareRecordForService(TableService service, Optional<RegulardataRecordAdapter> item) {
         RegulardataRecordAdapter record = item.orElseGet(() -> new RegulardataRecordAdapter(new RegulardataRecord()));
         useServiceToDeleteRecord(service, record);

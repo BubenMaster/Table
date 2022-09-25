@@ -33,18 +33,6 @@ public class TableConfiguration {
     @Value("${spring.datasource.url}")
     String jdbcUrl;
 
-////    @Autowired
-//    private final PropertiesFromFile env;
-//
-//    {
-//        try {
-//            env = new PropertiesFromFile("application.properties");
-//
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     public TableConfiguration() {}
 
     @Bean
@@ -88,15 +76,6 @@ public class TableConfiguration {
     @Bean
     public JOOQToSpringExceptionTransformer jooqToSpringExceptionTransformer() {
         return new JOOQToSpringExceptionTransformer();
-    }
-
-    @PreDestroy
-    public void preDestroy(){
-        try {
-            dataSource().getConnection().close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }

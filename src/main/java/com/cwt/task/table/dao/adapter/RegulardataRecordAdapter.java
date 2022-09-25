@@ -10,6 +10,7 @@ import java.util.Objects;
 
 public class RegulardataRecordAdapter {
 
+    @SuppressWarnings("FieldMayBeFinal")
     private RegulardataRecord record;
 
     private String name;
@@ -82,9 +83,9 @@ public class RegulardataRecordAdapter {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RegulardataRecordAdapter that = (RegulardataRecordAdapter) o;
-        return Objects.equals(getName(), that.getName())
-                && Objects.equals(getComment(), that.getComment())
-                && Objects.equals(getAmount(), that.getAmount());
+        return Objects.equals(this.getName(), that.getName())
+                && Objects.equals(this.getComment(), that.getComment())
+                && Objects.equals(this.getAmount(), that.getAmount());
     }
 
     @Override
