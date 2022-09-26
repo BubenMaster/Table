@@ -155,7 +155,7 @@ public class AphroditeGeneralView extends VerticalLayout{
 
     private InputStream loadStreamFromLocalFileOfDataBase() {
         String localFileName = "table.json";
-        File tempFile = new File(service.readDataToLocalFile(localFileName));
+        service.readDataToLocalFile(localFileName);
         return loadFromLocalFile(localFileName);
 
     }

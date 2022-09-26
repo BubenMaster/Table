@@ -48,7 +48,6 @@ public class TableServiceImpl implements TableService {
     @Override
     public String readDataToLocalFile(String localFileName) {
         List<RegulardataRecordAdapterForJson> records = tableDAO.getAllRawRegularDataRecords();
-        System.out.println(records);
         return jsonWriter.createJsonFileOf(records,localFileName);
     }
 }

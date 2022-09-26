@@ -17,14 +17,11 @@ public class JsonWriter {
         Writer writer;
         ObjectMapper mapper = new ObjectMapper();
 
-
         File localFile = new File(localFileName);
-        System.out.println(localFile.getAbsolutePath());
 
         try {
             writer = new FileWriter(localFile);
             mapper.writeValue(writer, records);
-            System.out.println("written to file");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
