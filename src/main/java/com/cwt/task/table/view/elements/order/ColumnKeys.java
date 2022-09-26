@@ -11,15 +11,12 @@ public class ColumnKeys {
     public static String comment(){
         return Tables.REGULARDATA.COMMENT.getName();
     }
-
     public static String amount(){
         return Tables.REGULARDATA.AMOUNT.getName();
     }
-
     public static String created(){
         return Tables.REGULARDATA.CREATED.getName();
     }
-
     public static String updated(){
         return Tables.REGULARDATA.UPDATED.getName();
     }

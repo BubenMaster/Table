@@ -51,7 +51,6 @@ public class RegulardataRecordAdapter {
         this.record.setAmount(value);
     }
 
-
     public LocalDateTime getUpdated() {
         return this.record.getUpdated();
     }

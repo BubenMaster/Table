@@ -13,7 +13,6 @@ public class GridLayout extends HorizontalLayout {
     RecordsGrid recordsGrid = new RecordsGrid(RegulardataRecordAdapter.class);
     RecordGridContextMenuContainer contextMenu;
 
-
     public GridLayout() {
         super();
     }
@@ -23,7 +22,6 @@ public class GridLayout extends HorizontalLayout {
         setAlignItems(Alignment.CENTER);
         contextMenu = new RecordGridContextMenuContainer(recordsGrid.addContextMenu());
         add(recordsGrid, contextMenu.getRecordGridContextMenu());
-
     }
 
     @Bean("recordsGridOnView")
@@ -35,5 +33,4 @@ public class GridLayout extends HorizontalLayout {
     public RecordGridContextMenuContainer contextMenu(){
         return contextMenu;
     }
-
 }

@@ -72,6 +72,4 @@ public class TableDAOImpl implements TableDAO {
                 .plusSeconds(offset.getTotalSeconds());
         return localTime;
     }
-
-
 }

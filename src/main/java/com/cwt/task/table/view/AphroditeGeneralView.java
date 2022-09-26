@@ -8,6 +8,7 @@ import com.cwt.task.table.service.TableService;
 import com.cwt.task.table.view.elements.GridLayout;
 import com.cwt.task.table.view.elements.RecordsGrid;
 import com.cwt.task.table.view.elements.RecordGridContextMenuContainer;
+import com.vaadin.cdi.annotation.VaadinServiceEnabled;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -33,8 +34,8 @@ import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-@Route(value = "/table-aphrodite")
-@PageTitle("Aphrodite View")
+@Route(value = "")
+@PageTitle("View")
 @SpringComponent
 @ComponentScan({"com.cwt.task.table"})
 @PropertySource("classpath:view.properties")
@@ -204,10 +205,7 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
     private void downloadDataButtonListener() {
-        FileDownloadWrapper downloadWrapper = new FileDownloadWrapper("data.json"
-                , () -> "{\nis = this\njson = ?\n}".getBytes(StandardCharsets.UTF_8));
-        downloadWrapper.wrapComponent(downloadWrapper);
-        newRecord.add(downloadWrapper);
+        // TODO: 26.09.2022 implement this
     }
 
 

@@ -6,10 +6,13 @@ import org.jooq.impl.DefaultExecuteListener;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLStateSQLExceptionTranslator;
+import org.springframework.stereotype.Component;
 
 
+@Component
 public class JOOQToSpringExceptionTransformer extends DefaultExecuteListener {
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void exception(ExecuteContext ctx) {
         SQLDialect dialect = ctx.configuration().dialect();
@@ -17,6 +20,7 @@ public class JOOQToSpringExceptionTransformer extends DefaultExecuteListener {
                 ? new SQLErrorCodeSQLExceptionTranslator(dialect.name())
                 : new SQLStateSQLExceptionTranslator();
 
+        //noinspection SqlNoDataSourceInspection,SqlDialectInspection,ConstantConditions
         ctx.exception(translator.translate("jOOQ", ctx.sql(), ctx.sqlException()));
     }
 }
