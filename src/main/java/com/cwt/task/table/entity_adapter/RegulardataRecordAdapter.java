@@ -1,8 +1,6 @@
-package com.cwt.task.table.dao.adapter;
+package com.cwt.task.table.entity_adapter;
 
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

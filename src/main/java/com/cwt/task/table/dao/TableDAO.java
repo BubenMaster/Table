@@ -1,6 +1,6 @@
 package com.cwt.task.table.dao;
 
-import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
+import com.cwt.task.table.entity_adapter.RegulardataRecordAdapter;
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 
 import java.util.List;

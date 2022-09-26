@@ -1,13 +1,13 @@
 package com.cwt.task.table.view;
 
 
-import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
+import com.cwt.task.table.entity_adapter.RegulardataRecordAdapter;
 
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import com.cwt.task.table.service.TableService;
-import com.cwt.task.table.view.grid.GridLayout;
-import com.cwt.task.table.view.grid.RecordsGrid;
-import com.cwt.task.table.view.grid.RecordGridContextMenuContainer;
+import com.cwt.task.table.view.elements.GridLayout;
+import com.cwt.task.table.view.elements.RecordsGrid;
+import com.cwt.task.table.view.elements.RecordGridContextMenuContainer;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -21,16 +21,16 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.annotation.RouteScope;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
+import org.vaadin.olli.FileDownloadWrapper;
 
 
 import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Route(value = "/table-aphrodite")
@@ -88,7 +88,9 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
     void configureGUI(){
+
         setSizeFull();
+
 
         newRecordConfigure();
 
@@ -101,6 +103,7 @@ public class AphroditeGeneralView extends VerticalLayout{
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.START);
     }
+
 
     private void newRecordConfigure(){
         newRecord.setHeaderTitle(newRecordHeaderTitle);
@@ -163,15 +166,16 @@ public class AphroditeGeneralView extends VerticalLayout{
         add(upperLayout);
     }
 
+    private void onInitServiceRequests() {
+        recordsGridOnView.refreshRecords(service);
+    }
+
     private void configureListeners() {
         creationRecordButtonListener();
         saveButtonListener();
         gridContextMenuListener();
-        recordsGridOnView.configureBinder(service);
-    }
-
-    private void onInitServiceRequests() {
-        recordsGridOnView.refreshRecords(service);
+        inlineEditorListener();
+        downloadDataButtonListener();
     }
 
     private void saveButtonListener() {
@@ -195,5 +199,17 @@ public class AphroditeGeneralView extends VerticalLayout{
     private void gridContextMenuListener(){
         contextMenu.deleteButtonClickListener(service, recordsGridOnView);
     }
+
+    private void inlineEditorListener() {recordsGridOnView.configureInlineEditor(service);
+    }
+
+    private void downloadDataButtonListener() {
+        FileDownloadWrapper downloadWrapper = new FileDownloadWrapper("data.json"
+                , () -> "{\nis = this\njson = ?\n}".getBytes(StandardCharsets.UTF_8));
+        downloadWrapper.wrapComponent(downloadWrapper);
+        newRecord.add(downloadWrapper);
+    }
+
+
 
 }

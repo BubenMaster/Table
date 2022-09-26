@@ -1,26 +1,24 @@
-package com.cwt.task.table.view.grid;
+package com.cwt.task.table.view.elements;
 
-import com.cwt.task.table.dao.adapter.RegulardataRecordAdapter;
+import com.cwt.task.table.entity_adapter.RegulardataRecordAdapter;
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import com.cwt.task.table.service.TableService;
-import com.cwt.task.table.view.grid.order.ColumnOrder;
+import com.cwt.task.table.view.elements.order.ColumnOrder;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 
 import javax.annotation.PostConstruct;
 
 import java.util.List;
 
-import static com.cwt.task.table.view.grid.order.ColumnKeys.*;
-import static com.cwt.task.table.view.grid.order.ColumnKeys.created;
+import static com.cwt.task.table.view.elements.order.ColumnKeys.*;
+import static com.cwt.task.table.view.elements.order.ColumnKeys.created;
 
 
 public class RecordsGrid extends Grid<RegulardataRecordAdapter>{
@@ -61,7 +59,7 @@ public class RecordsGrid extends Grid<RegulardataRecordAdapter>{
         return service.getAllRegularDataRecords();
     }
 
-    public void configureBinder(TableService service) {
+    public void configureInlineEditor(TableService service) {
 
         Label message = new Label();
 
