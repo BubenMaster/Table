@@ -1,14 +1,14 @@
 package com.cwt.task.table.view;
 
 
-import com.cwt.task.table.entity_adapter.RegulardataRecordAdapter;
+import com.cwt.task.table.adaptation.RegulardataRecordAdapter;
 
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import com.cwt.task.table.service.TableService;
 import com.cwt.task.table.view.elements.GridLayout;
 import com.cwt.task.table.view.elements.RecordsGrid;
 import com.cwt.task.table.view.elements.RecordGridContextMenuContainer;
-import com.vaadin.cdi.annotation.VaadinServiceEnabled;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -27,11 +27,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
-import org.vaadin.olli.FileDownloadWrapper;
+import org.vaadin.stefan.LazyDownloadButton;
 
 
 import javax.annotation.PostConstruct;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Route(value = "")
@@ -45,8 +49,8 @@ public class AphroditeGeneralView extends VerticalLayout{
 
     Binder<RegulardataRecordAdapter> binder;
 
-    @Value("${downloadButton.title}") Button downloadDataButton;
-    @Value("${creationRecordButton.title}") Button creationRecordButton;
+
+
     @Value("${nameField.title}") TextField nameField;
     @Value("${commentField.title}") TextField commentField;
     @Value("${amountField.title}") TextField amountField;
@@ -54,7 +58,8 @@ public class AphroditeGeneralView extends VerticalLayout{
     @Value("${cancelButton.title}") String newRecordCancelButtonTitle;
     @Value("${grid.title}") H3 gridTitle;
     @Value("${convertToIntegerError.message}") String convertToIntegerErrorMessage;
-
+    @Value("${downloadButton.title}") String downloadDataButtonTitle;
+    @Value("${creationRecordButton.title}") String creationRecordButtonTitle;
 
     List<RegulardataRecordAdapter> records;
     @Autowired
@@ -83,24 +88,19 @@ public class AphroditeGeneralView extends VerticalLayout{
     public void init()
     {
         addClassName("general-view");
-        configureGUI();
+        configureLayouts();
         onInitServiceRequests();
         configureListeners();
     }
 
-    void configureGUI(){
-
+    void configureLayouts(){
         setSizeFull();
-
 
         newRecordConfigure();
 
-        downloadDataButtonConfigure();
-        creationRecordButtonConfigure();
         upperToolBarConfigure();
 
         add(gridLayout);
-//        gridLayout.add(contextMenu);
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.START);
     }
@@ -143,12 +143,43 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
 
-    private void downloadDataButtonConfigure() {
-        downloadDataButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+    private Component downloadDataButton() {
+        LazyDownloadButton lazyDownloadButton = new LazyDownloadButton(downloadDataButtonTitle,
+                () -> "tableData.json",
+                this::loadStreamFromLocalFileOfDataBase
+        );
+
+        lazyDownloadButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+        return lazyDownloadButton;
     }
 
-    private void creationRecordButtonConfigure() {
+    private InputStream loadStreamFromLocalFileOfDataBase() {
+        String localFileName = "table.json";
+        File tempFile = new File(service.readDataToLocalFile(localFileName));
+        return loadFromLocalFile(localFileName);
+
+    }
+
+    private InputStream loadFromLocalFile(String localFileName) {
+        try {
+            return Files.newInputStream(Paths.get(localFileName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private Component creationRecordButton() {
+        Button creationRecordButton = new Button(creationRecordButtonTitle);
         creationRecordButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        creationRecordButtonListener(creationRecordButton);
+
+        return creationRecordButton;
+    }
+
+    private void creationRecordButtonListener(Button creationRecordButton) {
+        creationRecordButton.addClickListener(e-> newRecord.open());
     }
 
     private void upperToolBarConfigure() {
@@ -157,7 +188,7 @@ public class AphroditeGeneralView extends VerticalLayout{
         upperLeftLayout.setAlignItems(Alignment.START);
         upperLeftLayout.setJustifyContentMode(JustifyContentMode.END);
 
-        VerticalLayout upperRightLayout = new VerticalLayout(downloadDataButton,creationRecordButton);
+        VerticalLayout upperRightLayout = new VerticalLayout(downloadDataButton(), creationRecordButton());
         upperRightLayout.setAlignItems(Alignment.END);
         upperRightLayout.setJustifyContentMode(JustifyContentMode.END);
 
@@ -172,11 +203,9 @@ public class AphroditeGeneralView extends VerticalLayout{
     }
 
     private void configureListeners() {
-        creationRecordButtonListener();
         saveButtonListener();
         gridContextMenuListener();
         inlineEditorListener();
-        downloadDataButtonListener();
     }
 
     private void saveButtonListener() {
@@ -192,22 +221,10 @@ public class AphroditeGeneralView extends VerticalLayout{
             newRecord.close();
         });
     }
-
-    private void creationRecordButtonListener() {
-        creationRecordButton.addClickListener(e-> newRecord.open());
-    }
-
     private void gridContextMenuListener(){
         contextMenu.deleteButtonClickListener(service, recordsGridOnView);
     }
 
     private void inlineEditorListener() {recordsGridOnView.configureInlineEditor(service);
     }
-
-    private void downloadDataButtonListener() {
-        // TODO: 26.09.2022 implement this
-    }
-
-
-
 }

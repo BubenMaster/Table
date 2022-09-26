@@ -1,6 +1,7 @@
 package com.cwt.task.table.configuration;
 
 
+import com.vaadin.cdi.annotation.VaadinServiceEnabled;
 import com.vaadin.flow.spring.annotation.EnableVaadin;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

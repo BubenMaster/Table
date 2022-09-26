@@ -1,7 +1,9 @@
 package com.cwt.task.table.service;
 
+import com.cwt.task.table.adaptation.RegulardataRecordAdapterForJson;
 import com.cwt.task.table.dao.TableDAO;
-import com.cwt.task.table.entity_adapter.RegulardataRecordAdapter;
+import com.cwt.task.table.adaptation.RegulardataRecordAdapter;
+import com.cwt.task.table.serialization.JsonWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,9 @@ public class TableServiceImpl implements TableService {
 
     @Autowired
     TableDAO tableDAO;
+
+    @Autowired
+    JsonWriter jsonWriter;
 
     public TableServiceImpl() {
     }
@@ -38,5 +43,12 @@ public class TableServiceImpl implements TableService {
     @Override
     public void updateRegularDataRecord(RegulardataRecordAdapter record) {
         tableDAO.updateRegularDataRecord(record.actualRegularDataRecord());
+    }
+
+    @Override
+    public String readDataToLocalFile(String localFileName) {
+        List<RegulardataRecordAdapterForJson> records = tableDAO.getAllRawRegularDataRecords();
+        System.out.println(records);
+        return jsonWriter.createJsonFileOf(records,localFileName);
     }
 }

@@ -1,6 +1,6 @@
 package com.cwt.task.table.view.elements;
 
-import com.cwt.task.table.entity_adapter.RegulardataRecordAdapter;
+import com.cwt.task.table.adaptation.RegulardataRecordAdapter;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Bean;

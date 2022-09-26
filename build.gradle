@@ -33,6 +33,7 @@ dependencies {
 	implementation group: 'org.vaadin.olli', name: 'file-download-wrapper', version: '5.0.0'
 	implementation 'com.vaadin:vaadin-classic-components-flow:23.2.0'
 	implementation 'com.vaadin:vaadin-cdi:11.0.0'
+	implementation 'org.vaadin.stefan:lazy-download-button:1.0.0'
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools:2.7.3'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'

@@ -1,4 +1,4 @@
-package com.cwt.task.table.entity_adapter;
+package com.cwt.task.table.adaptation;
 
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 

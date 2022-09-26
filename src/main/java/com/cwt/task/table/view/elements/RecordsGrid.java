@@ -1,6 +1,6 @@
 package com.cwt.task.table.view.elements;
 
-import com.cwt.task.table.entity_adapter.RegulardataRecordAdapter;
+import com.cwt.task.table.adaptation.RegulardataRecordAdapter;
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import com.cwt.task.table.service.TableService;
 import com.cwt.task.table.view.elements.order.ColumnOrder;

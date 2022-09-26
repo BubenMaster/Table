@@ -1,6 +1,8 @@
 package com.cwt.task.table.dao;
 
-import com.cwt.task.table.entity_adapter.RegulardataRecordAdapter;
+import com.cwt.task.table.adaptation.RegulardataRecordAdapterForJson;
+import com.cwt.task.table.adaptation.Sorcerer;
+import com.cwt.task.table.adaptation.RegulardataRecordAdapter;
 import com.cwt.task.table.jooq.entity.tables.records.RegulardataRecord;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -16,7 +18,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,22 +27,27 @@ public class TableDAOImpl implements TableDAO {
     @Autowired
     DefaultDSLContext dslContext;
 
+    @Autowired
+    Sorcerer sorcerer;
+
 
     public TableDAOImpl(){
     }
 
     @Override
     public List<RegulardataRecordAdapter> getAllRegularDataRecords() {
-        Result<Record> result = dslContext
+        Result<Record> rawRecords = dslContext
                 .select()
                 .from(REGULARDATA).fetch();
-        List<RegulardataRecordAdapter> records = new ArrayList<>();
-        for (Record record: result){
-            RegulardataRecordAdapter recordAdapter = new RegulardataRecordAdapter((RegulardataRecord) record);
-            records.add(recordAdapter);
-        }
-        return records;
+        return sorcerer.castToRegularDataRecordAdapterList(rawRecords);
+    }
 
+    @Override
+    public List<RegulardataRecordAdapterForJson> getAllRawRegularDataRecords() {
+        Result<Record> rawRecords = dslContext
+                .select()
+                .from(REGULARDATA).fetch();
+        return sorcerer.castToRegulardataRecordAdapterForJson(rawRecords);
     }
 
     @Override
