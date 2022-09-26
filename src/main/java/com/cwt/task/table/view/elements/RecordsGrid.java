@@ -99,6 +99,7 @@ public class RecordsGrid extends Grid<RegulardataRecordAdapter>{
 
 
         addItemDoubleClickListener(event -> {
+            if (editor.isOpen()) editor.cancel();
             recordValues(recordImage, event.getItem());
             editor.editItem(event.getItem());
             Component editorComponent = event.getColumn().getEditorComponent();
