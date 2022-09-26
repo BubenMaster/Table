@@ -37,15 +37,11 @@ public class RecordsGrid extends Grid<RegulardataRecordAdapter>{
         ColumnOrder<RegulardataRecordAdapter> columnOrder = new ColumnOrder<>();
         setColumnOrder(
             columnOrder.of(this).byNames
-                (id(),name(),comment(),amount(),created(),updated())
+                (name(),comment(),amount(),created(),updated())
             );
-
-        getColumnByKey(id()).setWidth("5em");
         getColumnByKey(amount()).setWidth("5em");
         getColumnByKey(updated()).setWidth("11em");
         getColumnByKey(created()).setWidth("11em");
-
-
         }
 
 
@@ -108,7 +104,6 @@ public class RecordsGrid extends Grid<RegulardataRecordAdapter>{
             }
         });
 
-
         editor.addCancelListener(e -> message.setText("Cancel"));
     }
 
@@ -134,7 +129,7 @@ public class RecordsGrid extends Grid<RegulardataRecordAdapter>{
     private void recordValues(RegulardataRecordAdapter recordImage, RegulardataRecordAdapter item) {
         recordImage.setName(item.getName());
         recordImage.setComment(item.getComment());
-        recordImage.setId(item.getId());
+        recordImage.setAmount(item.getAmount());
     }
 
 }

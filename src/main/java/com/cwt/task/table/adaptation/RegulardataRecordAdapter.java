@@ -20,11 +20,11 @@ public class RegulardataRecordAdapter {
         this.record = record;
     }
 
-    public Integer getId() {
+    public Integer Id() {
         return this.record.getId();
     }
 
-    public void setId(Integer value){
+    public void Id(Integer value){
         this.record.setId(value);
     }
 

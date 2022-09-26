@@ -13,6 +13,7 @@ public class ColumnOrder<T> {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public Grid.Column<T>[] byNames(String... names){
         Grid.Column<T>[] columns;
         columns = new Grid.Column[names.length];

@@ -4,9 +4,9 @@ import com.cwt.task.table.jooq.entity.Tables;
 
 public class ColumnKeys {
 
-    public static String id(){
-        return Tables.REGULARDATA.ID.getName();
-    }
+//    public static String id(){
+//        return Tables.REGULARDATA.ID.getName();
+//    }
     public static String name(){ return Tables.REGULARDATA.NAME.getName();}
     public static String comment(){
         return Tables.REGULARDATA.COMMENT.getName();
