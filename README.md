@@ -31,10 +31,12 @@ Table raws clickable as well and opens modal window with record edit options.
 <br><br>
 ### Solution
 
-Created database connection and prepared transactions.
-<br>
-Created simplest view, but it took time.
-<br>
-Next step is making service and DAO
-<br>
-Single page is http://127.0.0.1:8080/table-aphrodite
+Single page is http://127.0.0.1:8080
+
+For Add record use `Create Record` button
+
+For Delete use table Context Menu by clicking `mouse right button`
+
+For Change record use `mouse double click`
+
+`Download Data` yet not  implemented
