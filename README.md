@@ -39,4 +39,4 @@ For Delete use table Context Menu by clicking `mouse right button`
 
 For Change record use `mouse double click`
 
-`Download Data` yet not  implemented
+For Download .json formatted data use `Download Data` button
